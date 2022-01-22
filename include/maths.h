@@ -40,5 +40,6 @@ double pixelToMeter(double px);
 double angleBetweenVectors(Vector3d *v1, Vector3d *v2);
 double distBetweenPoints(Point3d *p1, Point3d *p2);
 double illuminationInfluence(double illumination);
+double vect3dNorm(Vector3d *vct);
 
 #endif

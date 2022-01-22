@@ -3,19 +3,24 @@
 /* ___________________________________________ */
 
 void turnVectorAngle(Vector3d *vct, Angle3d *angle){
-    if(angle->x != 0) {
-        Vector3d temp = *vct;
-        vct->y = ((temp.y * cos(angle->x)) - (temp.z * sin(angle->x)));
-        vct->z = ((temp.y * sin(angle->x)) + (temp.z * cos(angle->x)));
-    } if(angle->y != 0) {
-        Vector3d temp = *vct;
-        vct->x = ((temp.x * cos(angle->y)) + (temp.z * sin(angle->y)));
-        vct->z = ((temp.x * -sin(angle->y)) + (temp.z * cos(angle->y)));
-    } if(angle->z != 0) {
-        Vector3d temp = *vct;
-        vct->x = ((temp.x * cos(angle->z)) - (temp.y * sin(angle->z)));
-        vct->y = ((temp.x * sin(angle->z)) + (temp.y * cos(angle->z)));
-    }
+    double c1 = cos(angle->z / 2);
+    double c2 = cos(angle->y / 2);
+    double c3 = cos(angle->z / 2);
+    double s1 = sin(angle->z / 2);
+    double s2 = sin(angle->y / 2);
+    double s3 = sin(angle->z / 2);
+
+    double a = c1 * c2 * c3 - s1 * s2 * s3;
+    double b = s1 * s2 * c3 + c1 * c2 * s3;
+    double c = s1 * c2 * c3 + c1 * s2 * s3;
+    double d = c1 * s2 * c3 - s1 * c2 * s3;
+
+    double t2 = a*b; double t3 = a*c; double t4 = a*d; double t5 = -b*b;
+    double t6 = b*c; double t7 = b*d; double t8 = -c*c; double t9 = c*d;
+    double t10 = -d*d;
+    double v1 = 2 * ((t8 + t10) * vct->x + (t6 - t4) * vct->y + (t3 + t7) * vct->z) + vct->x;
+    double v2 = 2 * ((t4 + t6) * vct->x + (t5 + t10) * vct->y + (t9 - t2) * vct->z) + vct->y;
+    double v3 = 2 * ((t7 - t3) * vct->x + (t2 + t9) * vct->y + (t5 + t8) * vct->z) + vct->z;
 }
 
 /* ___________________________________________ */
@@ -89,6 +94,12 @@ double angleBetweenVectors(Vector3d *v1, Vector3d *v2){
 
 double distBetweenPoints(Point3d *p1, Point3d *p2){
     return sqrt(pow(p1->x - p2->x, 2) + pow(p1->y - p2->y, 2) + pow(p1->z - p2->z, 2));
+}
+
+/* ___________________________________________ */
+
+double vect3dNorm(Vector3d *vct){
+    return sqrt(pow(vct->x,2) + pow(vct->y,2) + pow(vct->z,2));
 }
 
 /* ___________________________________________ */

@@ -4,5 +4,6 @@
 #define IMAGE_WIDTH 1920
 #define IMAGE_HEIGH 1080
 #define REF_WHITE_LUMINESCENCE 4000
+#define LIGHT_BOUNCE 4
 
 #endif

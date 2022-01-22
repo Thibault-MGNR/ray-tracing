@@ -19,6 +19,8 @@ typedef struct Color{
 typedef struct Ray{
     Vector3d dirVector;
     Point3d initPoint;
+    Color color;
+    float intensity;
 } Ray;
 
 // structures d'une sphere
@@ -60,6 +62,7 @@ typedef struct Scene{
 
 Scene *initScene(Image *img, Point3d positionCamera, Angle3d orientationCamera, int depthOfView);
 Scene *closeScene(Scene *scn);
+Ray *initRay(void);
 void initCamera(Camera *camera, Point3d *pos, Angle3d *ang, int *dov, Image *img);
 Ray *initRayCam(Camera *camera, int posX, int posY);
 Ray *clearRay(Ray *ray);

@@ -5,6 +5,9 @@
 
 Scene *initScene(Image *img, Point3d positionCamera, Angle3d orientationCamera, int depthOfView){
     Scene *scene = malloc(sizeof(Scene));
+    if(!scene)
+        exitErrorAllocation();
+    
     Camera *camera = &scene->camera;
     scene->nbSphere = 0;
     scene->nbLights = 0;
@@ -38,10 +41,20 @@ void initCamera(Camera *camera, Point3d *pos, Angle3d *ang, int *dov, Image *img
 
 /* ___________________________________________ */
 
-Ray *initRayCam(Camera *camera, int posX, int posY){
+Ray *initRay(void){
     Ray *ray = malloc(sizeof(Ray));
     if(!ray)
         exitErrorAllocation();
+    
+    ray->intensity = 0;
+    
+    return ray;
+}
+
+/* ___________________________________________ */
+
+Ray *initRayCam(Camera *camera, int posX, int posY){
+    Ray *ray = initRay();
     ray->initPoint = camera->position;
     Vector3d orientation;
     orientation.x = pixelToMeter((double)posX - (IMAGE_WIDTH / 2.0));
@@ -49,6 +62,12 @@ Ray *initRayCam(Camera *camera, int posX, int posY){
     orientation.z = pixelToMeter((IMAGE_HEIGH / 2.0) - (double)posY);
     turnVectorAngle(&orientation, &camera->angleCamera);
 
+    double normVectDir = vect3dNorm(&orientation);
+    orientation.x = orientation.x / normVectDir;
+    orientation.y = orientation.y / normVectDir;
+    orientation.z = orientation.z / normVectDir;
+    
+    ray->intensity = 0;
     ray->dirVector = orientation;
 
     return ray;
