@@ -258,46 +258,35 @@ double calculateLighting(Scene *scn, int xCam, int yCam, double dist, int sphere
     double illumination = 0;
 
     for(int i = 0; i < scn->nbLights; ++i){
-        Point3d initLightPos = scn->tabOfLight[i].position;
-        Point3d currentLightPos = {0, 0, 0};
+        Point3d *initLightPos = &scn->tabOfLight[i].position;
 
-        for(int x = 0; x < SAMPLES; ++x){
-            currentLightPos.x = cos((2 * PI * x)/ SAMPLES) * scn->tabOfLight[i].radius + initLightPos.x;
-            for(int y = 0; y < SAMPLES; ++y){
-                currentLightPos.y = sin((2 * PI * y)/ SAMPLES) * scn->tabOfLight[i].radius + initLightPos.y;
-                for(int z = 0; z < SAMPLES; ++z){
-                    currentLightPos.z = sin((2 * PI * z)/ SAMPLES) * scn->tabOfLight[i].radius + initLightPos.z;
+        int isHide = 0;
+        Ray ray = generateRayLightCoord(&pos, initLightPos);
 
-                    int isHide = 0;
-                    Ray ray = generateRayLightCoord(&pos, &currentLightPos);
-
-                    for(int j = 0; j < scn->nbSphere; ++j){
-                        double factVect = calculateNearestIntersection(&scn->tabOfSphere[j], &ray);
-                        if((factVect != -1 && (sphereIndex != j))){
-                            isHide = 1;
-                        }
-                    }
-
-                    if(!isHide){
-                        Vector3d sphereVector;
-                        sphereVector.x = pos.x - scn->tabOfSphere[sphereIndex].position.x;
-                        sphereVector.y = pos.y - scn->tabOfSphere[sphereIndex].position.y;
-                        sphereVector.z = pos.z - scn->tabOfSphere[sphereIndex].position.z;
-
-                        double angle = angleBetweenVectors(&sphereVector, &ray.dirVector);
-                        double distance = distBetweenPoints(&pos, &scn->tabOfLight[i].position);
-
-                        if(angle <= PI / 2){
-                            illumination += (scn->tabOfLight[i].power * 10 * cos(angle)) / pow(distance, 2);
-                        }
-                    }
-                }
+        for(int j = 0; j < scn->nbSphere; ++j){
+            double factVect = calculateNearestIntersection(&scn->tabOfSphere[j], &ray);
+            if((factVect != -1 && (sphereIndex != j))){
+                isHide = 1;
             }
         }
-    }
 
-    double factor = illuminationInfluence(illumination / pow(SAMPLES, 3));
+        if(!isHide){
+            Vector3d sphereVector;
+            sphereVector.x = pos.x - scn->tabOfSphere[sphereIndex].position.x;
+            sphereVector.y = pos.y - scn->tabOfSphere[sphereIndex].position.y;
+            sphereVector.z = pos.z - scn->tabOfSphere[sphereIndex].position.z;
+
+            double angle = angleBetweenVectors(&sphereVector, &ray.dirVector);
+            double distance = distBetweenPoints(&pos, &scn->tabOfLight[i].position);
+
+            if(angle <= PI / 2){
+                illumination += (scn->tabOfLight[i].power * 10 * cos(angle)) / pow(distance, 2);
+            }
+        }
+
+    double factor = illuminationInfluence(illumination);
     return factor;
+    }
 }
 
 /* ___________________________________________ */
