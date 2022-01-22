@@ -77,4 +77,5 @@ Ray generateRayLightCoord(Point3d *point, Point3d *lightPos);
 double calculateLighting(Scene *scn, int xCam, int yCam, double dist, int sphereIndex);
 void calculateABC(Ray *ray, Sphere *sphere, double *a, double *b, double *c);
 
+
 #endif
