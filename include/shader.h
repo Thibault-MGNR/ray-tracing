@@ -8,12 +8,13 @@ typedef struct Shader{
     float specular;
     float shininess;
     float diffuse;
+    Color color;
 } Shader;
 
 /* FONCTIONS */
 
 Shader *initShader(void);
 Shader *closeShader(Shader *shader);
-Ray *applyShader(Shader *shader, Ray *incindent_ray, int n);
+Ray *applyShader(Shader *shader, Ray *incindent_ray, Point3d *pos, int n);
 
 #endif

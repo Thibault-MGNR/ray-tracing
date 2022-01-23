@@ -302,10 +302,10 @@ double calculateLighting(Scene *scn, int xCam, int yCam, double dist, int sphere
                 illumination += (scn->tabOfLight[i].power * 10 * cos(angle)) / pow(distance, 2);
             }
         }
-
+    }
+    
     double factor = illuminationInfluence(illumination);
     return factor;
-    }
 }
 
 /* ___________________________________________ */

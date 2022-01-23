@@ -26,7 +26,7 @@ Shader *closeShader(Shader *shader){
 
 /* ___________________________________________ */
 
-Ray *applyShader(Shader *shader, Ray *incindent_ray, int n){
+Ray *applyShader(Shader *shader, Ray *incindent_ray, Point3d *pos, int n){
     if(n > LIGHT_BOUNCE){
         Ray *r = initRay();
         r->intensity = 0;

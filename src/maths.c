@@ -3,6 +3,8 @@
 /* ___________________________________________ */
 
 void turnVectorAngle(Vector3d *vct, Angle3d *angle){
+    if(angle->x == 0 && angle->y == 0 && angle->z == 0)
+        return;
     double c1 = cos(angle->z / 2);
     double c2 = cos(angle->y / 2);
     double c3 = cos(angle->z / 2);
