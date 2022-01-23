@@ -8,6 +8,9 @@
 #include "main.h"
 
 /* STRUCTURES */
+
+typedef struct Shader Shader;
+
 // structure d'une couleur
 typedef struct Color{
     int r;
@@ -26,7 +29,7 @@ typedef struct Ray{
 // structures d'une sphere
 typedef struct Sphere{
     Point3d position;
-    Color color;
+    Shader *shader;
     float radius;
 } Sphere;
 
@@ -72,12 +75,13 @@ double calculateNearestIntersection(Sphere *sphere, Ray *ray);
 void generateImage(Scene *scn);
 void newSphere(Scene *scn, Point3d *pos, double radius, Color *color);
 void clearTabOfSphere(Scene *scn);
-int indexNearestIntersectionSphere(Scene *scn, int x, int y, double *distance);
+int indexNearestIntersectionSphere(Scene *scn, Ray *ray, double *distance);
 void newLight(Scene *scn, double power, Point3d *pos, double radius);
 void clearTabOfLight(Scene *scn);
-Point3d calculateCoordIntersection(Scene *scn, int xCam, int yCam, double dist);
+Point3d calculateCoordIntersection(Scene *scn, Ray *ray, double dist);
 Ray generateRayLightCoord(Point3d *point, Point3d *lightPos);
-double calculateLighting(Scene *scn, int xCam, int yCam, double dist, int sphereIndex);
+double calculateLightingCamRay(Scene *scn, int xCam, int yCam, double dist, int sphereIndex);
+double calculateLighting(Scene *scn, Point3d *pos, int sphereIndex);
 void calculateABC(Ray *ray, Sphere *sphere, double *a, double *b, double *c);
 
 
