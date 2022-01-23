@@ -39,7 +39,7 @@ int main(void){
 
     char adress[30];
 
-    sprintf(adress, "out/rendu4.bmp");
+    sprintf(adress, "out/rendu5.bmp");
     saveImage(img, adress);
     clearImage(img);
 
