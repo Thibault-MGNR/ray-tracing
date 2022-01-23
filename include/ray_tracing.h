@@ -7,6 +7,8 @@
 #include "error_handler.h"
 #include "main.h"
 
+int hidden; // ###############################
+
 /* STRUCTURES */
 
 typedef struct Shader Shader;

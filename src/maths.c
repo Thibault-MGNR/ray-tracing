@@ -130,7 +130,7 @@ double max(double a, double b){
 /* ___________________________________________ */
 
 double scalarProduct(Vector3d *a, Vector3d *b){
-    return a->x * b->x + a->y * b->y + a->z * b->z;
+    return (a->x * b->x) + (a->y * b->y) + (a->z * b->z);
 }
 
 /* ___________________________________________ */

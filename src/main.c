@@ -6,6 +6,7 @@
 #include "maths.h"
 
 int main(void){
+    hidden = 0;  // ###############################
 
     Image *img = newImage(1920, 1080, "TIBO");
 

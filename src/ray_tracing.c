@@ -120,7 +120,7 @@ double calculateNearestIntersection(Sphere *sphere, Ray *ray){
 
     if(discriminant < 0){
         return -1;
-    } else if(discriminant < 0.00000000001) {
+    } else if(discriminant < 0.0001) {
         return calculateFirstSolution(discriminant, a, b);
     } else {
         double first = calculateFirstSolution(discriminant, a, b);
@@ -159,6 +159,10 @@ void generateImage(Scene *scn){
             } else {
                 changeColorPixelRGB(scn->camera.img, x, y, 10, 10, 10);
             }
+            if(hidden){                             // ###############################
+                changeColorPixelRGB(scn->camera.img, x, y, 255, 255, 0);
+                hidden = 0;
+            }           // ###############################
         }
         showLoading(y);
     }
@@ -272,7 +276,8 @@ Ray generateRayLightCoord(Point3d *point, Point3d *lightPos){
 
 double calculateLightingCamRay(Scene *scn, int xCam, int yCam, double dist, int sphereIndex){
     Point3d pos = calculateCoordIntersection(scn, scn->camera.tabOfRay[yCam][xCam], dist);
-    return illuminationInfluence(calculateLighting(scn, &pos, sphereIndex));
+    double d = calculateLighting(scn, &pos, sphereIndex);
+    return d;
 }
 
 /* ___________________________________________ */
@@ -325,14 +330,16 @@ double calculateLighting(Scene *scn, Point3d *pos, int sphereIndex){
             double angle = angleBetweenVectors(&sphereVector, &ray.dirVector);
             double distance = distBetweenPoints(pos, &scn->tabOfLight[i].position);
 
-            if(angle <= PI / 2){
+            if(angle <= PI / (double)2){
                 illumination += (scn->tabOfLight[i].power * 10 * cos(angle)) / pow(distance, 2);
             }
+        } else {
+            hidden = 1;
         }
     }
     
     double factor = illuminationInfluence(illumination);
-    return illumination;
+    return factor;
 }
 
 /* ___________________________________________ */
