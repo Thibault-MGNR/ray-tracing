@@ -41,5 +41,9 @@ double angleBetweenVectors(Vector3d *v1, Vector3d *v2);
 double distBetweenPoints(Point3d *p1, Point3d *p2);
 double illuminationInfluence(double illumination);
 double vect3dNorm(Vector3d *vct);
+Vector3d calcReflectVector(Vector3d *incidentVect, Vector3d *normalVect);
+double max(double a, double b);
+double scalarProduct(Vector3d *a, Vector3d *b);
+void normalize(Vector3d *vect);
 
 #endif
