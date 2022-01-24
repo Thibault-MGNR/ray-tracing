@@ -80,8 +80,9 @@ void newLight(Scene *scn, double power, Point3d *pos, double radius);
 void clearTabOfLight(Scene *scn);
 Point3d calculateCoordIntersection(Scene *scn, int xCam, int yCam, double dist);
 Ray generateRayLightCoord(Point3d *point, Point3d *lightPos);
-double calculateLighting(Scene *scn, int xCam, int yCam, double dist, int sphereIndex);
+double calculateLightingCam(Scene *scn, int xCam, int yCam, double dist, int sphereIndex);
 void calculateABC(Ray *ray, Sphere *sphere, double *a, double *b, double *c);
+double calculateLighting(Scene *scn, int sphereIndex, Point3d *pos);
 
 
 #endif
