@@ -1,5 +1,6 @@
 #include "ray_tracing.h"
 #include "main.h"
+#include "shader.h"
 
 /* ___________________________________________ */
 
@@ -149,6 +150,7 @@ double calculateNearestIntersection(Sphere *sphere, Ray *ray){
 
 void generateImage(Scene *scn){
     initLoading("Generation de l'image:", 0, IMAGE_HEIGH - 1, 10);
+
     for(int y = 0; y < IMAGE_HEIGH; ++y){
         for(int x = 0; x < IMAGE_WIDTH; ++x){
 
@@ -157,7 +159,7 @@ void generateImage(Scene *scn){
 
             if(index >= 0){
                 double lightFactor = calculateLighting(scn, x, y, distance, index);
-                Color *sphereColor = &scn->tabOfSphere[index].color;
+                Color *sphereColor = &scn->tabOfSphere[index].shader->color;
                 changeColorPixelRGB(scn->camera.img, x, y, sphereColor->r * lightFactor, sphereColor->g * lightFactor, sphereColor->b * lightFactor);
             } else {
                 changeColorPixelRGB(scn->camera.img, x, y, 10, 10, 10);
@@ -206,12 +208,16 @@ void newSphere(Scene *scn, Point3d *pos, double radius, Color *color){
     Sphere *sphere = &scn->tabOfSphere[scn->nbSphere - 1];
     sphere->position = *pos;
     sphere->radius = radius;
-    sphere->color = *color;
+    sphere->shader = initShader();
+    sphere->shader->color = *color;
 }
 
 /* ___________________________________________ */
 
 void clearTabOfSphere(Scene *scn){
+    for(int i = 0; i < scn->nbSphere; i++){
+        scn->tabOfSphere[i].shader = closeShader(scn->tabOfSphere[i].shader);
+    }
     free(scn->tabOfSphere);
 }
 

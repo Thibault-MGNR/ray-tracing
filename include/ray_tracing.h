@@ -8,6 +8,9 @@
 #include "main.h"
 
 /* STRUCTURES */
+
+typedef struct Shader Shader;
+
 // structure d'une couleur
 typedef struct Color{
     int r;
@@ -26,7 +29,7 @@ typedef struct Ray{
 // structures d'une sphere
 typedef struct Sphere{
     Point3d position;
-    Color color;
+    Shader *shader;
     float radius;
 } Sphere;
 

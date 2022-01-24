@@ -84,7 +84,7 @@ double pixelToMeter(double px){
 
 double angleBetweenVectors(Vector3d *v1, Vector3d *v2){
 
-    double scalar = (v1->x * v2->x) + (v1->y * v2->y) + (v1->z * v2->z);
+    double scalar = scalarProduct(v1, v2);
     double v1Standard = sqrt(pow(v1->x, 2) + pow(v1->y, 2) + pow(v1->z, 2));
     double v2Standard = sqrt(pow(v2->x, 2) + pow(v2->y, 2) + pow(v2->z, 2));
     double angle = acos(scalar / (v1Standard * v2Standard));
@@ -102,6 +102,44 @@ double distBetweenPoints(Point3d *p1, Point3d *p2){
 
 double vect3dNorm(Vector3d *vct){
     return sqrt(pow(vct->x,2) + pow(vct->y,2) + pow(vct->z,2));
+}
+
+/* ___________________________________________ */
+
+Vector3d calcReflectVector(Vector3d *incidentVect, Vector3d *normalVect){
+    double theta = angleBetweenVectors(incidentVect, normalVect);
+    Vector3d rVct;
+    rVct.x = incidentVect->x + (2 * cos(theta)) * normalVect->x;
+    rVct.y = incidentVect->y + (2 * cos(theta)) * normalVect->y;
+    rVct.z = incidentVect->z + (2 * cos(theta)) * normalVect->z;
+    double norm = vect3dNorm(&rVct);
+    rVct.x = rVct.x / norm;
+    rVct.y = rVct.y / norm;
+    rVct.z = rVct.z / norm;
+    return rVct;
+}
+
+/* ___________________________________________ */
+
+double max(double a, double b){
+    if(a >= b)
+        return a;
+    return b;
+}
+
+/* ___________________________________________ */
+
+double scalarProduct(Vector3d *a, Vector3d *b){
+    return (a->x * b->x) + (a->y * b->y) + (a->z * b->z);
+}
+
+/* ___________________________________________ */
+
+void normalize(Vector3d *vect){
+    double norme = vect3dNorm(vect);
+    vect->x = vect->x / norme;
+    vect->y = vect->y / norme;
+    vect->z = vect->z / norme;
 }
 
 /* ___________________________________________ */
