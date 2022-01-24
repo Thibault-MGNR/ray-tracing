@@ -112,10 +112,7 @@ Vector3d calcReflectVector(Vector3d *incidentVect, Vector3d *normalVect){
     rVct.x = incidentVect->x + (2 * cos(theta)) * normalVect->x;
     rVct.y = incidentVect->y + (2 * cos(theta)) * normalVect->y;
     rVct.z = incidentVect->z + (2 * cos(theta)) * normalVect->z;
-    double norm = vect3dNorm(&rVct);
-    rVct.x = rVct.x / norm;
-    rVct.y = rVct.y / norm;
-    rVct.z = rVct.z / norm;
+    normalize(&rVct);
     return rVct;
 }
 

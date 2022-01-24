@@ -63,10 +63,7 @@ Ray *initRayCam(Camera *camera, int posX, int posY){
     orientation.z = pixelToMeter((IMAGE_HEIGH / 2.0) - (double)posY);
     turnVectorAngle(&orientation, &camera->angleCamera);
 
-    double normVectDir = vect3dNorm(&orientation);
-    orientation.x = orientation.x / normVectDir;
-    orientation.y = orientation.y / normVectDir;
-    orientation.z = orientation.z / normVectDir;
+    normalize(&orientation);
     
     ray->intensity = 0;
     ray->dirVector = orientation;
@@ -272,6 +269,7 @@ Ray generateRayLightCoord(Point3d *point, Point3d *lightPos){
     ray.dirVector.x = (lightPos->x - point->x) / 100;
     ray.dirVector.y = (lightPos->y - point->y) / 100;
     ray.dirVector.z = (lightPos->z - point->z) / 100;
+    normalize(&ray.dirVector);
 
     return ray;
 }
@@ -300,6 +298,7 @@ double calculateLighting(Scene *scn, int xCam, int yCam, double dist, int sphere
             sphereVector.x = pos.x - scn->tabOfSphere[sphereIndex].position.x;
             sphereVector.y = pos.y - scn->tabOfSphere[sphereIndex].position.y;
             sphereVector.z = pos.z - scn->tabOfSphere[sphereIndex].position.z;
+            normalize(&sphereVector);
 
             double angle = angleBetweenVectors(&sphereVector, &ray.dirVector);
             double distance = distBetweenPoints(&pos, &scn->tabOfLight[i].position);
