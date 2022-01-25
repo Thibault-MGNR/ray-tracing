@@ -150,25 +150,10 @@ void generateImage(Scene *scn){
 
     for(int y = 0; y < IMAGE_HEIGH; ++y){
         for(int x = 0; x < IMAGE_WIDTH; ++x){
-
-            /*
-            double distance = 0;
-            int index = indexNearestIntersectionSphere(scn, scn->camera.tabOfRay[y][x], &distance);
-
-            if(index >= 0){
-                // double lightFactor = calculateLightingCam(scn, x, y, distance, index);
-                // Color *sphereColor = &scn->tabOfSphere[index].shader->color;
-                // changeColorPixelRGB(scn->camera.img, x, y, sphereColor->r * lightFactor, sphereColor->g * lightFactor, sphereColor->b * lightFactor);
-            } else {
-                changeColorPixelRGB(scn->camera.img, x, y, 10, 10, 10);
-            }
-            */
-           
             Ray *ray = scn->camera.tabOfRay[y][x];
             Color *colorR = &ray->color;
             applyShader(scn, ray, 0);
             changeColorPixelRGB(scn->camera.img, x, y, colorR->r, colorR->g, colorR->b);
-
         }
         showLoading(y);
     }
@@ -283,45 +268,17 @@ Ray generateRayLightCoord(Point3d *point, Point3d *lightPos){
 
 double calculateLightingCam(Scene *scn, int xCam, int yCam, double dist, int sphereIndex){
     Point3d pos = calculateCoordIntersection(scn, scn->camera.tabOfRay[yCam][xCam], dist);
-    Vector3d lightVect;
-    double factor = calculateLighting(scn, sphereIndex, &pos, &lightVect);
+    double factor = calculateLighting(scn, sphereIndex, &pos);
     return factor;
 }
 
 /* ___________________________________________ */
 
-double calculateLighting(Scene *scn, int sphereIndex, Point3d *pos, Vector3d *lightVect){
+double calculateLighting(Scene *scn, int sphereIndex, Point3d *pos){
     double illumination = 0;
-    lightVect->x = 0; lightVect->y = 0; lightVect->z = 0;
 
     for(int i = 0; i < scn->nbLights; ++i){
-        Point3d *initLightPos = &scn->tabOfLight[i].position;
-
-        int isHide = 0;
-        Ray ray = generateRayLightCoord(pos, initLightPos);
-
-        for(int j = 0; j < scn->nbSphere; ++j){
-            double factVect = calculateNearestIntersection(&scn->tabOfSphere[j], &ray);
-            if((factVect != -1 && (sphereIndex != j))){
-                isHide = 1;
-            }
-        }
-
-        if(!isHide){
-            Vector3d sphereVector;
-            *lightVect = vectorSum(lightVect, &ray.dirVector);
-            sphereVector.x = pos->x - scn->tabOfSphere[sphereIndex].position.x;
-            sphereVector.y = pos->y - scn->tabOfSphere[sphereIndex].position.y;
-            sphereVector.z = pos->z - scn->tabOfSphere[sphereIndex].position.z;
-            normalize(&sphereVector);
-
-            double angle = angleBetweenVectors(&sphereVector, &ray.dirVector);
-            double distance = distBetweenPoints(pos, &scn->tabOfLight[i].position);
-
-            if(angle <= PI / 2){
-                illumination += (scn->tabOfLight[i].power * 10 * cos(angle)) / pow(distance, 2);
-            }
-        }
+        illumination += calculateLightingForOneLight(scn, sphereIndex, pos, &scn->tabOfLight[i]);
     }
     
     double factor = illuminationInfluence(illumination);
@@ -348,6 +305,38 @@ void calculateABC(Ray *ray, Sphere *sphere, double *a, double *b, double *c){
     *b = 2 * (ray->dirVector.x * (ray->initPoint.x - sphere->position.x) + ray->dirVector.y * (ray->initPoint.y - sphere->position.y) + ray->dirVector.z * (ray->initPoint.z - sphere->position.z));
 
     *c = pow((ray->initPoint.x - sphere->position.x), 2) + pow((ray->initPoint.y - sphere->position.y), 2) + pow((ray->initPoint.z - sphere->position.z), 2) - pow(sphere->radius, 2);
+}
+
+/* ___________________________________________ */
+
+double calculateLightingForOneLight(Scene *scn, int sphereIndex, Point3d *pos, Light *light){
+    Point3d *initLightPos = &light->position;
+    int isHide = 0;
+    Ray ray = generateRayLightCoord(pos, initLightPos);
+    double illumination = 0;
+
+    for(int j = 0; j < scn->nbSphere; ++j){
+        double factVect = calculateNearestIntersection(&scn->tabOfSphere[j], &ray);
+        if((factVect != -1 && (sphereIndex != j))){
+            isHide = 1;
+        }
+    }
+
+    if(!isHide){
+        Vector3d sphereVector;
+        sphereVector.x = pos->x - scn->tabOfSphere[sphereIndex].position.x;
+        sphereVector.y = pos->y - scn->tabOfSphere[sphereIndex].position.y;
+        sphereVector.z = pos->z - scn->tabOfSphere[sphereIndex].position.z;
+        normalize(&sphereVector);
+
+        double angle = angleBetweenVectors(&sphereVector, &ray.dirVector);
+        double distance = distBetweenPoints(pos, initLightPos);
+
+        if(angle <= PI / 2){
+            illumination = (light->power * 10 * cos(angle)) / pow(distance, 2);
+        }
+    }
+    return illumination;
 }
 
 /* ___________________________________________ */

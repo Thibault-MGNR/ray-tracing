@@ -29,14 +29,6 @@ Shader *closeShader(Shader *shader){
 /* ___________________________________________ */
 
 void applyShader(Scene *scn, Ray *incindent_ray, int n){
-    /**
-     * @brief à moi même
-     * 
-     * calculer la lumière diffuse pour chaque source de lumière et non le vecteur somme des lumières
-     * 
-     * diviser la puissance lumineuse par le carré de la distance
-     * 
-     */
     if(n >= LIGHT_BOUNCE){
         incindent_ray->intensity = 0;
         return;
@@ -46,9 +38,9 @@ void applyShader(Scene *scn, Ray *incindent_ray, int n){
     int index = indexNearestIntersectionSphere(scn, incindent_ray, &dist);
     if(index < 0){
         incindent_ray->intensity = 0;
-        incindent_ray->color.r = 0;
-        incindent_ray->color.g = 0;
-        incindent_ray->color.b = 0;
+        incindent_ray->color.r = 10;
+        incindent_ray->color.g = 10;
+        incindent_ray->color.b = 10;
         return;
     }
 
@@ -66,16 +58,12 @@ void applyShader(Scene *scn, Ray *incindent_ray, int n){
     r->initPoint = pos;
     r->intensity = 0;
     
-    Vector3d lightVect;
-    double lightIntensity = calculateLighting(scn, index, &pos, &lightVect);
+    double lightIntensity = calculateLighting(scn, index, &pos);
     incindent_ray->intensity = lightIntensity;
-    normalize(&lightVect);
 
-    // Point3d pos = calculateCoordIntersection(scn, r, dist);
-    // applyShader(scn, r, n + 1);
     double pointIntensity = r->intensity * REF_WHITE_LUMINESCENCE + lightIntensity;
     double lightFactor = illuminationInfluence(pointIntensity);
-    double diffuseIntensity = max(shader->diffuse * max(scalarProduct(&normalVect, &lightVect), 0), AMBIENT_LIGHT);
+    double diffuseIntensity = max(shader->diffuse * max(lightIntensity, 0), AMBIENT_LIGHT);
 
     incindent_ray->color.r = shader->color.r * diffuseIntensity;
     incindent_ray->color.g = shader->color.g * diffuseIntensity;

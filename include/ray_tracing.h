@@ -82,7 +82,8 @@ Point3d calculateCoordIntersection(Scene *scn, Ray  *ray, double dist);
 Ray generateRayLightCoord(Point3d *point, Point3d *lightPos);
 double calculateLightingCam(Scene *scn, int xCam, int yCam, double dist, int sphereIndex);
 void calculateABC(Ray *ray, Sphere *sphere, double *a, double *b, double *c);
-double calculateLighting(Scene *scn, int sphereIndex, Point3d *pos, Vector3d *lightVect);
+double calculateLighting(Scene *scn, int sphereIndex, Point3d *pos);
+double calculateLightingForOneLight(Scene *scn, int sphereIndex, Point3d *pos, Light *light);
 
 
 #endif

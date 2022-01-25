@@ -5,6 +5,6 @@
 #define IMAGE_HEIGH 1080
 #define REF_WHITE_LUMINESCENCE 4000
 #define LIGHT_BOUNCE 1
-#define AMBIENT_LIGHT 0.1
+#define AMBIENT_LIGHT 0.07
 
 #endif
