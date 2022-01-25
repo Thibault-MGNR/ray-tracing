@@ -3,8 +3,9 @@
 /* ___________________________________________ */
 
 void turnVectorAngle(Vector3d *vct, Angle3d *angle){
-    if(angle->x == 0 && angle->y == 0 && angle->z == 0)
+    if((angle->x == 0) && (angle->y == 0) && (angle->z == 0)){
         return;
+    }
     double c1 = cos(angle->z / 2);
     double c2 = cos(angle->y / 2);
     double c3 = cos(angle->z / 2);
@@ -23,6 +24,10 @@ void turnVectorAngle(Vector3d *vct, Angle3d *angle){
     double v1 = 2 * ((t8 + t10) * vct->x + (t6 - t4) * vct->y + (t3 + t7) * vct->z) + vct->x;
     double v2 = 2 * ((t4 + t6) * vct->x + (t5 + t10) * vct->y + (t9 - t2) * vct->z) + vct->y;
     double v3 = 2 * ((t7 - t3) * vct->x + (t2 + t9) * vct->y + (t5 + t8) * vct->z) + vct->z;
+    
+    vct->x = v1;
+    vct->y = v2;
+    vct->z = v3;
 }
 
 /* ___________________________________________ */
@@ -162,3 +167,10 @@ Vector3d vectorSub(Vector3d *v1, Vector3d *v2){
 }
 
 /* ___________________________________________ */
+
+double min(double a, double b){
+    if(a < b){
+        return a;
+    }
+    return b;
+}

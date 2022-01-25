@@ -13,7 +13,7 @@ int main(void){
     Point3d posCamera = {0, 0, 0};
     Angle3d angleCamera = {0, 0, 0};
 
-    scene = initScene(img, posCamera, angleCamera, degToRad(90));
+    scene = initScene(img, &posCamera, &angleCamera, degToRad(90));
 
     Point3d posSphere1 = {0, 10, 0};
     Color colorSphere1 = {250, 0, 0};
@@ -33,7 +33,7 @@ int main(void){
     Point3d posLight2 = {-3, 10, 3};
     newLight(scene, 1000, &posLight2, 0.1);
 
-    Point3d posLight3 = {0, 7, 0};
+    Point3d posLight3 = {0, 7, 3};
     newLight(scene, 3000, &posLight3, 0.1);
 
     generateImage(scene);
@@ -42,7 +42,7 @@ int main(void){
 
     char adress[30];
 
-    sprintf(adress, "out/rendu5.bmp");
+    sprintf(adress, "out/rendu6.bmp");
     saveImage(img, adress);
     clearImage(img);
 

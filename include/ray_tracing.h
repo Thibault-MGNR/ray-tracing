@@ -63,7 +63,7 @@ typedef struct Scene{
 
 /* FONCTIONS */
 
-Scene *initScene(Image *img, Point3d positionCamera, Angle3d orientationCamera, int depthOfView);
+Scene *initScene(Image *img, Point3d *positionCamera, Angle3d *orientationCamera, int depthOfView);
 Scene *closeScene(Scene *scn);
 Ray *initRay(void);
 void initCamera(Camera *camera, Point3d *pos, Angle3d *ang, int *dov, Image *img);

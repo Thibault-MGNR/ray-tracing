@@ -13,7 +13,7 @@ Shader *initShader(void){
         exitErrorAllocation();
     
     shdr->diffuse = 1;
-    shdr->shininess = 30;
+    shdr->shininess = 250;
     shdr->specular = 0;
 
     return shdr;
@@ -60,28 +60,26 @@ void applyShader(Scene *scn, Ray *incindent_ray, int n){
     r->intensity = 0;
     */
 
-    double diffuseIntensity = diffuseEffect(scn, shader, index, &pos);
+    Color diffuseColor = diffuseEffect(scn, shader, index, &pos);
     Color specularColor = specularEffect(scn, shader, index, &pos, &normalVect, incindent_ray);
 
-    incindent_ray->color.r = shader->color.r * diffuseIntensity + specularColor.r;
-    incindent_ray->color.g = shader->color.g * diffuseIntensity + specularColor.g;
-    incindent_ray->color.b = shader->color.b * diffuseIntensity + specularColor.b;
-
-    
-    incindent_ray->color.r = (incindent_ray->color.r > 254) ? 254 : incindent_ray->color.r;
-    incindent_ray->color.g = (incindent_ray->color.g > 254) ? 254 : incindent_ray->color.g;
-    incindent_ray->color.b = (incindent_ray->color.b > 254) ? 254 : incindent_ray->color.b;
-
+    incindent_ray->color = sumColors(&diffuseColor, &specularColor);
+    normalizeColor(&incindent_ray->color);
 
     // free(r);
 }
 
 /* ___________________________________________ */
 
-double diffuseEffect(Scene *scn, Shader *shader, int sphereIndex, Point3d *pos){
+Color diffuseEffect(Scene *scn, Shader *shader, int sphereIndex, Point3d *pos){
+    Color diffuseColor;
     double lightIntensity = calculateLighting(scn, sphereIndex, pos);
     double diffuseIntensity = max(shader->diffuse * max(lightIntensity, 0), AMBIENT_LIGHT);
-    return diffuseIntensity;
+    diffuseColor.r = shader->color.r * diffuseIntensity;
+    diffuseColor.g = shader->color.g * diffuseIntensity;
+    diffuseColor.b = shader->color.b * diffuseIntensity;
+
+    return diffuseColor;
 }
 
 /* ___________________________________________ */
@@ -93,18 +91,18 @@ Color specularEffect(Scene *scn, Shader *shader, int sphereIndex, Point3d *pos, 
         int isHidden = 0;
         for(int i = 0; i < scn->nbSphere; i++){
             int index  = calculateNearestIntersection(&scn->tabOfSphere[i], &lightRay);
-            if(index >= 0){
+            if(index >= 0 && index != sphereIndex){
                 isHidden = 1;
             }
         }
-        if(1){
+        if(!isHidden){
             Vector3d *L = &lightRay.dirVector;
             Vector3d vectorNull = {0, 0, 0};
             Vector3d *E = &incidentRay->dirVector;
             Vector3d oppE = vectorSub(&vectorNull, E);
-            Vector3d H = vectorSub(&H, &oppE);
+            Vector3d H = vectorSum(L, &oppE);
             normalize(&H);
-            specularIntensity = specularIntensity + pow(max(scalarProduct(normalVect, &H), 0), shader->shininess);
+            specularIntensity += pow(max(scalarProduct(normalVect, &H), 0), shader->shininess);
         }
     }
 
@@ -117,6 +115,26 @@ Color specularEffect(Scene *scn, Shader *shader, int sphereIndex, Point3d *pos, 
     specularColor.b = 254 * specularIntensity;
 
     return specularColor;
+}
+
+/* ___________________________________________ */
+
+Color sumColors(Color *c1, Color *c2){
+    Color sum;
+    sum.r = c1->r + c2->r;
+    sum.g = c1->g + c2->g;
+    sum.b = c1->b + c2->b;
+    normalizeColor(&sum);
+
+    return sum;
+}
+
+/* ___________________________________________ */
+
+void normalizeColor(Color *c1){
+    c1->r = max(min(c1->r, 254), 0);
+    c1->g = max(min(c1->g, 254), 0);
+    c1->b = max(min(c1->b, 254), 0);
 }
 
 /* ___________________________________________ */

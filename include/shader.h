@@ -16,7 +16,9 @@ typedef struct Shader{
 Shader *initShader(void);
 Shader *closeShader(Shader *shader);
 void applyShader(Scene *scn, Ray *incindent_ray, int n);
-double diffuseEffect(Scene *scn, Shader *shader, int sphereIndex, Point3d *pos);
+Color diffuseEffect(Scene *scn, Shader *shader, int sphereIndex, Point3d *pos);
 Color specularEffect(Scene *scn, Shader *shader, int sphereIndex, Point3d *pos, Vector3d *normalVect, Ray *incidentRay);
+Color sumColors(Color *c1, Color *c2);
+void normalizeColor(Color *c1);
 
 #endif

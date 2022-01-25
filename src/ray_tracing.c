@@ -4,7 +4,7 @@
 
 /* ___________________________________________ */
 
-Scene *initScene(Image *img, Point3d positionCamera, Angle3d orientationCamera, int depthOfView){
+Scene *initScene(Image *img, Point3d *positionCamera, Angle3d *orientationCamera, int depthOfView){
     Scene *scene = malloc(sizeof(Scene));
     if(!scene)
         exitErrorAllocation();
@@ -12,7 +12,7 @@ Scene *initScene(Image *img, Point3d positionCamera, Angle3d orientationCamera, 
     Camera *camera = &scene->camera;
     scene->nbSphere = 0;
     scene->nbLights = 0;
-    initCamera(camera, &positionCamera, &orientationCamera, &depthOfView, img);
+    initCamera(camera, positionCamera, orientationCamera, &depthOfView, img);
     initTabOfRayCam(camera);
 
     return scene;
@@ -121,7 +121,7 @@ double calculateNearestIntersection(Sphere *sphere, Ray *ray){
 
     if(discriminant < 0){
         return -1;
-    } else if(discriminant < 0.0001) {
+    } else if(discriminant < 0.0000000001) {
         return calculateFirstSolution(discriminant, a, b);
     } else {
         double first = calculateFirstSolution(discriminant, a, b);
@@ -256,9 +256,9 @@ Ray generateRayLightCoord(Point3d *point, Point3d *lightPos){
     Ray ray;
 
     ray.initPoint = *point;
-    ray.dirVector.x = (lightPos->x - point->x) / 100;
-    ray.dirVector.y = (lightPos->y - point->y) / 100;
-    ray.dirVector.z = (lightPos->z - point->z) / 100;
+    ray.dirVector.x = lightPos->x - point->x;
+    ray.dirVector.y = lightPos->y - point->y;
+    ray.dirVector.z = lightPos->z - point->z;
     normalize(&ray.dirVector);
 
     return ray;
