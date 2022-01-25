@@ -75,14 +75,14 @@ double calculateNearestIntersection(Sphere *sphere, Ray *ray);
 void generateImage(Scene *scn);
 void newSphere(Scene *scn, Point3d *pos, double radius, Color *color);
 void clearTabOfSphere(Scene *scn);
-int indexNearestIntersectionSphere(Scene *scn, int x, int y, double *distance);
+int indexNearestIntersectionSphere(Scene *scn, Ray *ray, double *distance);
 void newLight(Scene *scn, double power, Point3d *pos, double radius);
 void clearTabOfLight(Scene *scn);
-Point3d calculateCoordIntersection(Scene *scn, int xCam, int yCam, double dist);
+Point3d calculateCoordIntersection(Scene *scn, Ray  *ray, double dist);
 Ray generateRayLightCoord(Point3d *point, Point3d *lightPos);
 double calculateLightingCam(Scene *scn, int xCam, int yCam, double dist, int sphereIndex);
 void calculateABC(Ray *ray, Sphere *sphere, double *a, double *b, double *c);
-double calculateLighting(Scene *scn, int sphereIndex, Point3d *pos);
+double calculateLighting(Scene *scn, int sphereIndex, Point3d *pos, Vector3d *lightVect);
 
 
 #endif

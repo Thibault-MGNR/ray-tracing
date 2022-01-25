@@ -31,7 +31,7 @@ int main(void){
     newLight(scene, 4000, &posLight1, 0.1);
 
     Point3d posLight2 = {-3, 10, 3};
-    newLight(scene, 1000, &posLight2, 0.1);
+    // newLight(scene, 1000, &posLight2, 0.1);
 
     generateImage(scene);
 
@@ -39,7 +39,7 @@ int main(void){
 
     char adress[30];
 
-    sprintf(adress, "out/rendu5.bmp");
+    sprintf(adress, "out/rendu6.bmp");
     saveImage(img, adress);
     clearImage(img);
 

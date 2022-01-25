@@ -45,5 +45,7 @@ Vector3d calcReflectVector(Vector3d *incidentVect, Vector3d *normalVect);
 double max(double a, double b);
 double scalarProduct(Vector3d *a, Vector3d *b);
 void normalize(Vector3d *vect);
+Vector3d vectorSum(Vector3d *v1, Vector3d *v2);
+Vector3d vectorSub(Vector3d *v1, Vector3d *v2);
 
 #endif

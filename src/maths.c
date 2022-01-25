@@ -140,3 +140,25 @@ void normalize(Vector3d *vect){
 }
 
 /* ___________________________________________ */
+
+Vector3d vectorSum(Vector3d *v1, Vector3d *v2){
+    Vector3d sum;
+    sum.x = v1->x + v2->x;
+    sum.y = v1->y + v2->y;
+    sum.z = v1->z + v2->z;
+
+    return sum;
+}
+
+/* ___________________________________________ */
+
+Vector3d vectorSub(Vector3d *v1, Vector3d *v2){
+    Vector3d sub;
+    sub.x = v1->x - v2->x;
+    sub.y = v1->y - v2->y;
+    sub.z = v1->z - v2->z;
+
+    return sub;
+}
+
+/* ___________________________________________ */

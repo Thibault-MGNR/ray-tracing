@@ -15,6 +15,6 @@ typedef struct Shader{
 
 Shader *initShader(void);
 Shader *closeShader(Shader *shader);
-void applyShader(Scene *scn, int indexSphere, Ray *incindent_ray, Point3d *pos, int n);
+void applyShader(Scene *scn, Ray *incindent_ray, int n);
 
 #endif
