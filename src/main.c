@@ -33,6 +33,9 @@ int main(void){
     Point3d posLight2 = {-3, 10, 3};
     newLight(scene, 1000, &posLight2, 0.1);
 
+    Point3d posLight3 = {0, 7, 0};
+    newLight(scene, 3000, &posLight3, 0.1);
+
     generateImage(scene);
 
     scene = closeScene(scene);

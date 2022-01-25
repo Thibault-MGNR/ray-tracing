@@ -10,15 +10,11 @@
         "UNICODE",
         "_UNICODE"
       ],
-      "compilerPath": "C:\\MinGW\\bin\\gcc.exe",
+      "compilerPath": "C:/MinGW/bin/gcc.exe",
       "cStandard": "${default}",
       "cppStandard": "${default}",
       "intelliSenseMode": "windows-gcc-x86",
-      "compilerArgs": [
-        "-Wall",
-        "-Wextra",
-        "-Wpedantic"
-      ]
+      "compilerArgs": []
     }
   ],
   "version": 4
