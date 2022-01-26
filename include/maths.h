@@ -49,4 +49,10 @@ void normalize(Vector3d *vect);
 Vector3d vectorSum(Vector3d *v1, Vector3d *v2);
 Vector3d vectorSub(Vector3d *v1, Vector3d *v2);
 
+/**
+ * @brief For points on the same line
+ * @return 0 if is between, 1 for other;
+ */
+int relativePosition(Point3d *pos1, Point3d *pos2, Point3d *checkPoint);
+
 #endif

@@ -85,13 +85,21 @@ Color diffuseEffect(Scene *scn, Shader *shader, int sphereIndex, Point3d *pos){
 /* ___________________________________________ */
 
 Color specularEffect(Scene *scn, Shader *shader, int sphereIndex, Point3d *pos, Vector3d *normalVect, Ray *incidentRay){
+    /**
+     * @brief
+     * 
+     * Vérifier que l'intersetcion de la lumière est bien entre le point et la source et non ailleurs
+     * 
+     */
     double specularIntensity = 0;
     for(int i = 0; i < scn->nbLights; i++){
         Ray lightRay = generateRayLightCoord(pos, &scn->tabOfLight[i].position);
         int isHidden = 0;
         for(int i = 0; i < scn->nbSphere; i++){
-            int index  = calculateNearestIntersection(&scn->tabOfSphere[i], &lightRay);
-            if(index >= 0 && index != sphereIndex){
+            double dist;
+            int index  = indexNearestIntersectionSphere(scn, &lightRay, &dist);
+            Point3d posIntersection = calculateCoordIntersection(scn, &lightRay, dist);
+            if(index >= 0 && index != sphereIndex /*&& relativePosition(pos, &lightRay.initPoint, &posIntersection) == 0*/){
                 isHidden = 1;
             }
         }

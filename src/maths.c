@@ -174,3 +174,17 @@ double min(double a, double b){
     }
     return b;
 }
+
+/* ___________________________________________ */
+
+int relativePosition(Point3d *pos1, Point3d *pos2, Point3d *checkPoint){
+    double pos12Norm = distBetweenPoints(pos2, pos1);
+    double pos1CheckPointNorm = distBetweenPoints(checkPoint, pos1);
+
+    if(pos12Norm >= pos1CheckPointNorm){
+        return 0;
+    }
+    return 1;
+}
+
+/* ___________________________________________ */

@@ -316,8 +316,10 @@ double calculateLightingForOneLight(Scene *scn, int sphereIndex, Point3d *pos, L
     double illumination = 0;
 
     for(int j = 0; j < scn->nbSphere; ++j){
-        double factVect = calculateNearestIntersection(&scn->tabOfSphere[j], &ray);
-        if((factVect != -1 && (sphereIndex != j))){
+        double dist;
+        int indexIntersection = indexNearestIntersectionSphere(scn, &ray, &dist);
+        Point3d posIntersection = calculateCoordIntersection(scn, &ray, dist);
+        if(indexIntersection != -1 && sphereIndex != j /*&& relativePosition(pos, &ray.initPoint, &posIntersection) == 0*/){
             isHide = 1;
         }
     }
